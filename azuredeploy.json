@@ -68,9 +68,7 @@
           "description": "Location for all resources."
         }
       },
-        "minTlsVersionNumber": {
-            "type": "string"
-        },
+       
         "kafkaRestProxyGroupName": {
             "type": "string",
             "metadata": {
@@ -219,7 +217,7 @@
               }
             ]
           },
-          "minSupportedTlsVersion": "[parameters('minTlsVersionNumber')]",
+         
                 "KafkaRestProperties": {
                     "ClientGroupInfo": {
                         "GroupName": "[parameters('KafkaRestProxyGroupName')]",

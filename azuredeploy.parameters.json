@@ -14,9 +14,7 @@
         "sshPassword": {
             "value": "GEN-PASSWORD"
         },
-        "minTlsVersionNumber": {
-            "value": "1.2"
-        },
+       
         "KafkaRestProxyGroupName": {
             "value": "myrestproxyusers"
         },
