@@ -124,7 +124,7 @@
         "type": "Microsoft.Storage/storageAccounts",
         "name": "[variables('clStgAcnt')]",
         "location": "[parameters('location')]",
-        "apiVersion": "2019-04-01",
+        "apiVersion": "2016-01-01",
         "sku": {
           "name": "[variables('storageAccountType')]"
         },
