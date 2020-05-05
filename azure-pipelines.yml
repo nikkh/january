@@ -13,20 +13,27 @@ variables:
   # Resource Group Name
   resourceGroupName: '$(applicationName)-rg'
 
-pool:
-  vmImage: 'ubuntu-latest'
+stages:
+- stage: Build
+  displayName: Build stage
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  jobs:
+  - job: deployCluster
+    displayName: DeployCluster
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'nicks internal subscription'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(ResourceGroupName)'
+        location: '$(Location)'
+        templateLocation: 'Linked artifact'
+        csmFile: 'System.DefaultWorkingDirectory)/azuredeploy.json'
+        csmParametersFile: '$(System.DefaultWorkingDirectory)/azuredeploy.parameters.json'
+        overrideParameters: '-application_name $(applicationName) -clusterLoginUserName $(clusterLoginUserName) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(kafkaRestProxyGroupName) -KafkaRestProxyGroupId $(kafkaRestProxyGroupId)'
+        deploymentMode: 'Incremental'
+        deploymentOutputs: deploymentOutputs
 
-#- task: AzureResourceGroupDeployment@2
-#        displayName: 'Create or Update App Service'
-#        inputs:
-#          azureSubscription: '$(azureSubscription)'
-#          resourceGroupName: '$(ResourceGroupName)'
-#          location: '$(Location)'
-#          csmFile: '$(System.DefaultWorkingDirectory)/azuredeploy.json'
-#          csmParametersFile: '$(System.DefaultWorkingDirectory)/azuredeploy.parameters.json'
-#          overrideParameters: '-application_name $(applicationName) -clusterLoginUserName $(clusterLoginUserName) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(kafkaRestProxyGroupName) -KafkaRestProxyGroupId $(kafkaRestProxyGroupId)'
-#          deploymentOutputs: deploymentOutputs
