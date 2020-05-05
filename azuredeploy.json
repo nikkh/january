@@ -203,6 +203,19 @@
                 }
               },
               {
+                "name": "kafkamanagementnode",
+                "targetInstanceCount": 2,
+                "hardwareProfile": {
+                              "vmSize": "Standard_D4_V2"
+                },
+                "osProfile": {
+                  "linuxOperatingSystemProfile": {
+                      "username": "[parameters('sshUserName')]",
+                      "password": "[parameters('sshPassword')]"
+                    }
+                }
+              },
+              {
                 "name": "zookeepernode",
                 "targetInstanceCount": 3,
                 "hardwareProfile": {
@@ -217,13 +230,12 @@
               }
             ]
           },
-         
-                "KafkaRestProperties": {
-                    "ClientGroupInfo": {
-                        "GroupName": "[parameters('KafkaRestProxyGroupName')]",
-                        "GroupId": "[parameters('KafkaRestProxyGroupId')]"
-                    }
-                }
+          "KafkaRestProperties": {
+              "ClientGroupInfo": {
+                  "GroupName": "[parameters('KafkaRestProxyGroupName')]",
+                  "GroupId": "[parameters('KafkaRestProxyGroupId')]"
+              }
+          }
         }
       },
       {
