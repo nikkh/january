@@ -11,7 +11,7 @@ Below is a representative architecture of how the Schema Registry is deployed on
 
 ![HDInsight Kafka Schema Registry](https://github.com/arnabganguly/Kafkaschemaregistry/blob/master/images/Pic1.png)
 
-Click [**Next**](https://github.com/arnabganguly/Kafkaschemaregistry/blob/master/HDInsightManagedKafka.md) to start the Lab 
+Click [**Next**](https://github.com/nikkh/january/blob/master/HDInsightManagedKafka.md) to start the Lab 
 
 
 <!--stackedit_data:
