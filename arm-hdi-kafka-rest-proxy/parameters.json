@@ -29,9 +29,6 @@
         "sshPassword": {
             "value": null
         },
-        "minTlsVersionNumber": {
-            "value": "1.2"
-        },
         "KafkaRestProxyGroupName": {
             "value": "adgroup1766"
         },

@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "0.9.0.0",
     "parameters": {
         "clusterName": {
@@ -61,9 +61,6 @@
             "metadata": {
                 "description": "The password must be at least 10 characters in length and must contain at least one digit, one non-alphanumeric character, and one upper or lower case letter."
             }
-        },
-        "minTlsVersionNumber": {
-            "type": "string"
         },
         "kafkaRestProxyGroupName": {
             "type": "string",
@@ -209,7 +206,6 @@
                         }
                     ]
                 },
-                "minSupportedTlsVersion": "[parameters('minTlsVersionNumber')]",
                 "KafkaRestProperties": {
                     "ClientGroupInfo": {
                         "GroupName": "[parameters('KafkaRestProxyGroupName')]",
