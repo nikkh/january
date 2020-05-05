@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "resourceGroup": {
+            "value": "milson-bastion-rg"
+        },
+        "bastionHostName": {
+            "value": "milson-bastion"
+        },
+        "subnetId": {
+            "value": "/subscriptions/3b78c509-6d2a-4582-987f-d6809b8dbfcd/resourceGroups/milson-aadds-rg/providers/Microsoft.Network/virtualNetworks/milson-vnet/subnets/AzureBastionSubnet"
+        },
+        "publicIpAddressName": {
+            "value": "milson-vnet-ip"
+        }
+    }
+}

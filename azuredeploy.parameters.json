@@ -13,6 +13,15 @@
         },
         "sshPassword": {
             "value": "GEN-PASSWORD"
+        },
+        "minTlsVersionNumber": {
+            "value": "1.2"
+        },
+        "KafkaRestProxyGroupName": {
+            "value": "myrestproxyusers"
+        },
+        "KafkaRestProxyGroupId": {
+            "value": "cb57b5b1-2788-46ef-abe5-b6a5bfa0040d"
         }
     }
 }

@@ -67,7 +67,22 @@
         "metadata": {
           "description": "Location for all resources."
         }
-      }
+      },
+        "minTlsVersionNumber": {
+            "type": "string"
+        },
+        "kafkaRestProxyGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Kafka REST Proxy security group."
+            }
+        },
+        "kafkaRestProxyGroupId": {
+            "type": "string",
+            "metadata": {
+                "description": "The id of the Kafka REST Proxy security group."
+            }
+        }
     },
     "variables": {
 
@@ -79,9 +94,6 @@
             "id": "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('clusterName'),'-vnet'))]",
             "subnet": "[concat(resourceId('Microsoft.Network/virtualNetworks', concat(parameters('clusterName'),'-vnet')), '/subnets/subnet1')]"
           },
-
-
-
       "clStgAcnt": "[concat(parameters('clusterName'),'store')]",
       "storageAccountType": "Standard_LRS",
       "applicationName": "schema-registry"
@@ -206,7 +218,14 @@
                 }
               }
             ]
-          }
+          },
+          "minSupportedTlsVersion": "[parameters('minTlsVersionNumber')]",
+                "KafkaRestProperties": {
+                    "ClientGroupInfo": {
+                        "GroupName": "[parameters('KafkaRestProxyGroupName')]",
+                        "GroupId": "[parameters('KafkaRestProxyGroupId')]"
+                    }
+                }
         }
       },
       {

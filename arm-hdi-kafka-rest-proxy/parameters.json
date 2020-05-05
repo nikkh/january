@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "test56990"
+        },
+        "clusterLoginUserName": {
+            "value": "nick"
+        },
+        "clusterLoginPassword": {
+            "value": null
+        },
+        "location": {
+            "value": "uksouth"
+        },
+        "clusterWorkerNodeCount": {
+            "value": 4
+        },
+        "clusterKind": {
+            "value": "KAFKA"
+        },
+        "clusterVersion": {
+            "value": "4.0"
+        },
+        "sshUserName": {
+            "value": "nickssh"
+        },
+        "sshPassword": {
+            "value": null
+        },
+        "minTlsVersionNumber": {
+            "value": "1.2"
+        },
+        "KafkaRestProxyGroupName": {
+            "value": "adgroup1766"
+        },
+        "KafkaRestProxyGroupId": {
+            "value": "d329a3d4-8697-4aa1-a437-de69f472d077"
+        }
+    }
+}
