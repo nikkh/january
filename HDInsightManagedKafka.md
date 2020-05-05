@@ -4,7 +4,7 @@ In this section we would deploy an HDInsight Managed Kafka  cluster with an Edge
 
 - Click on the Deploy to Azure Button to start the deployment process
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%nikkh%january%2Fmaster%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com2Fnikkh2Fjanuary2Fmaster2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a><a href="http://armviz.io/#/?load=https://raw.githubusercontent.com/nikkh/january/master/azuredeploy.json" target="_blank">
   <img src="http://armviz.io/visualizebutton.png"/>
@@ -42,7 +42,7 @@ In this section we would deploy an HDInsight Managed Kafka  cluster with an Edge
 
 - In the next section we would configure the Confluent Kafka Schema Registry that we installed on the edge node.  
 
-Click [**[Next](https://github.com/arnabganguly/nikkh/blob/master/ConfigureSchemaRegistry.md)**]
+Click [**[Next](https://github.com/nikkh/january/blob/master/ConfigureSchemaRegistry.md)**]
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbLTQyMjc3MTUzLC0xOTgxMzU5MTksMTM0Mz
 EyMjI0NCw5NzIzNDg5MTQsMTc4NDI0ODMyNiwtMTA4MTk0OTQz
