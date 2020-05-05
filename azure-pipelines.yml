@@ -33,7 +33,7 @@ stages:
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/azuredeploy.json'
         csmParametersFile: '$(System.DefaultWorkingDirectory)/azuredeploy.parameters.json'
-        overrideParameters: '-clusterLoginUserName $(clusterLoginUserName) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(kafkaRestProxyGroupName) -KafkaRestProxyGroupId $(kafkaRestProxyGroupId)'
+        overrideParameters: '-clusterName $(clusterName) -clusterLoginUserName $(clusterLoginUserName) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(kafkaRestProxyGroupName) -KafkaRestProxyGroupId $(kafkaRestProxyGroupId)'
         deploymentMode: 'Incremental'
         deploymentOutputs: deploymentOutputs
 
