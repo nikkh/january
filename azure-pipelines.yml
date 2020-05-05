@@ -13,7 +13,13 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+#- task: AzureResourceGroupDeployment@2
+#        displayName: 'Create or Update App Service'
+#        inputs:
+#          azureSubscription: '$(azureSubscription)'
+#          resourceGroupName: '$(ResourceGroupName)'
+#          location: '$(Location)'
+#          csmFile: '$(System.DefaultWorkingDirectory)/infra/azuredeploy.json'
+#          csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/azuredeploy.parameters.json'
+#          overrideParameters: '-application_name $(applicationName) -app_service_plan_sku S1 -server_administrator_Login "$(adminLogin)" -server_administrator_Login_Password $(password)'
+#          deploymentOutputs: deploymentOutputs
