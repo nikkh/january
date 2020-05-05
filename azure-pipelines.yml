@@ -6,6 +6,13 @@
 trigger:
 - master
 
+variables:
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: 'Nicks Internal Subscription'
+  
+  # Resource Group Name
+  resourceGroupName: '$(applicationName)-rg'
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -19,7 +26,7 @@ steps:
 #          azureSubscription: '$(azureSubscription)'
 #          resourceGroupName: '$(ResourceGroupName)'
 #          location: '$(Location)'
-#          csmFile: '$(System.DefaultWorkingDirectory)/infra/azuredeploy.json'
-#          csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/azuredeploy.parameters.json'
-#          overrideParameters: '-application_name $(applicationName) -app_service_plan_sku S1 -server_administrator_Login "$(adminLogin)" -server_administrator_Login_Password $(password)'
+#          csmFile: '$(System.DefaultWorkingDirectory)/azuredeploy.json'
+#          csmParametersFile: '$(System.DefaultWorkingDirectory)/azuredeploy.parameters.json'
+#          overrideParameters: '-application_name $(applicationName) -clusterLoginUserName $(ClusterLogin) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(KafkaRestProxyGroupName) -KafkaRestProxyGroupId $(KafkaRestProxyGroupId)'
 #          deploymentOutputs: deploymentOutputs
