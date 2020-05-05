@@ -28,5 +28,5 @@ steps:
 #          location: '$(Location)'
 #          csmFile: '$(System.DefaultWorkingDirectory)/azuredeploy.json'
 #          csmParametersFile: '$(System.DefaultWorkingDirectory)/azuredeploy.parameters.json'
-#          overrideParameters: '-application_name $(applicationName) -clusterLoginUserName $(ClusterLogin) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(KafkaRestProxyGroupName) -KafkaRestProxyGroupId $(KafkaRestProxyGroupId)'
+#          overrideParameters: '-application_name $(applicationName) -clusterLoginUserName $(clusterLoginUserName) -clusterLoginPassword $(clusterLoginPassword) -sshUserName $(sshUserName) -sshPassword $(clusterLoginPassword) -KafkaRestProxyGroupName $(kafkaRestProxyGroupName) -KafkaRestProxyGroupId $(kafkaRestProxyGroupId)'
 #          deploymentOutputs: deploymentOutputs
