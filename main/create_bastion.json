@@ -21,7 +21,7 @@
         "variables": 
         {
             "vnetName": "[concat(parameters('applicationId'), '-vnet')]",
-            "bastionName": "[concat(variables('applicationId'), '-bastion')]",
+            "bastionName": "[concat(parameters('applicationId'), '-bastion')]",
             "bastionSubnetName": "AzureBastionSubnet",
             "ipName": "[concat(variables('bastionName'), '-ip')]"
         },
