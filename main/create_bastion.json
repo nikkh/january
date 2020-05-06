@@ -1,3 +1,68 @@
-{
-    "comment": "Create an Azure Bastion in the VNet"
+
+    {
+        "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+          "applicationId": {
+            "type": "string",
+            "defaultValue": "application",
+            "metadata": {
+              "description": "Application id - will be used as stem for resource names"
+            }
+          },
+          "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+              "description": "Location for all resources."
+            }
+          }
+        },
+        "variables": 
+        {
+            "vnetName": "[concat(parameters('applicationId'), '-vnet')]",
+            "bastionName": "[concat(variables('applicationId'), '-bastion')]",
+            "bastionSubnetName": "AzureBastionSubnet",
+            "ipName": "[concat(variables('bastionName'), '-ip')]"
+        },
+        "resources": [
+        {
+            "apiVersion": "2019-02-01",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[variables('ipName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            },
+            "tags": {}
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Network/bastionHosts",
+            "name": "[variables('bastionName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('ipName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "subnet": {
+                               "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('vnetName')), '/subnets/', variables('bastionSubnetName'))]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('ipName'))]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "tags": {}
+        }
+    ]
 }

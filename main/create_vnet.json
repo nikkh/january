@@ -2,11 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "vnetName": {
+      "applicationId": {
         "type": "string",
-        "defaultValue": "VNet",
+        "defaultValue": "application",
         "metadata": {
-          "description": "VNet name"
+          "description": "Application id - will be used as stem for resource names"
         }
       },
       "vnetAddressPrefix": {
@@ -26,6 +26,7 @@
     },
     "variables": 
     {
+        "vnetName": "[concat(parameters('applicationId'), '-vnet')]",
         "addressSpaceRoot": "[substring(parameters('vnetAddressPrefix'), 0, 4)]",
         "gatewaySubnetName": "GatewaySubnet",
         "firewallSubnetName": "AzureFirewallSubnet",
@@ -44,7 +45,7 @@
       {
         "apiVersion": "2018-10-01",
         "type": "Microsoft.Network/virtualNetworks",
-        "name": "[parameters('vnetName')]",
+        "name": "[variables('vnetName')]",
         "location": "[parameters('location')]",
         "properties": {
           "addressSpace": {
@@ -60,7 +61,7 @@
             "location": "[parameters('location')]",
             "name": "[variables('gatewaySubnetName')]",
             "dependsOn": [
-              "[parameters('vnetName')]"
+              "[variables('vnetName')]"
             ],
             "properties": {
               "addressPrefix": "[variables('gatewaySubnetPrefix')]"
@@ -72,7 +73,7 @@
             "location": "[parameters('location')]",
             "name": "[variables('firewallSubnetName')]",
             "dependsOn": [
-              "[parameters('vnetName')]"
+              "[variables('vnetName')]"
             ],
             "properties": {
               "addressPrefix": "[variables('firewallSubnetPrefix')]"
@@ -84,7 +85,7 @@
             "location": "[parameters('location')]",
             "name": "[variables('bastionSubnetName')]",
             "dependsOn": [
-              "[parameters('vnetName')]"
+              "[variables('vnetName')]"
             ],
             "properties": {
               "addressPrefix": "[variables('bastionSubnetPrefix')]"
@@ -96,7 +97,7 @@
             "location": "[parameters('location')]",
             "name": "[variables('kafkaSubnetName')]",
             "dependsOn": [
-              "[parameters('vnetName')]", "[variables('kafkaNsgName')]"
+              "[variables('vnetName')]", "[variables('kafkaNsgName')]"
             ],
             "properties": {
               "addressPrefix": "[variables('kafkaSubnetPrefix')]",
@@ -111,7 +112,7 @@
             "location": "[parameters('location')]",
             "name": "[variables('sparkSubnetName')]",
             "dependsOn": [
-              "[parameters('vnetName')]"
+              "[variables('vnetName')]"
             ],
             "properties": {
               "addressPrefix": "[variables('sparkSubnetPrefix')]",
@@ -127,7 +128,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-03-01",
             "name": "[variables('kafkaNsgName')]",
-            "location": "uksouth",
+            "location": "[parameters('location')]",
             "properties": {
                 "securityRules": []
             }
@@ -136,7 +137,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-03-01",
             "name": "[variables('sparkNsgName')]",
-            "location": "uksouth",
+           "location": "[parameters('location')]",
             "properties": {
                 "securityRules": []
             }
