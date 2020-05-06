@@ -31,7 +31,9 @@
         "firewallSubnetName": "AzureFirewallSubnet",
         "bastionSubnetName": "AzureBastionSubnet",
         "kafkaSubnetName": "KafkaSubnet",
+        "kafkaNsgName": "[concat(variables('kafkaSubnetName'), '-nsg')]",
         "sparkSubnetName": "SparkBastionSubnet",
+        "sparkNsgName": "[concat(variables('sparkSubnetName'), '-nsg')]",
         "gatewaySubnetPrefix": "[concat(variables('addressSpaceRoot'), '.0.0/27')]",
         "firewallSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.1.0/24')]",
         "bastionSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.2.0/24')]",
@@ -94,10 +96,13 @@
             "location": "[parameters('location')]",
             "name": "[variables('kafkaSubnetName')]",
             "dependsOn": [
-              "[parameters('vnetName')]"
+              "[parameters('vnetName')]", "[variables('kafkaNsgName')]"
             ],
             "properties": {
-              "addressPrefix": "[variables('kafkaSubnetPrefix')]"
+              "addressPrefix": "[variables('kafkaSubnetPrefix')]",
+              "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('kafkaNsgName'))]"
+               }
             }
           },
           {
@@ -109,11 +114,32 @@
               "[parameters('vnetName')]"
             ],
             "properties": {
-              "addressPrefix": "[variables('sparkSubnetPrefix')]"
+              "addressPrefix": "[variables('sparkSubnetPrefix')]",
+              "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('sparkNsgName'))]"
+               }
             }
           }
          
         ]
-      }
+      },
+      {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-03-01",
+            "name": "[variables('kafkaNsgName')]",
+            "location": "uksouth",
+            "properties": {
+                "securityRules": []
+            }
+       },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-03-01",
+            "name": "[variables('sparkNsgName')]",
+            "location": "uksouth",
+            "properties": {
+                "securityRules": []
+            }
+       }
     ]
   }
