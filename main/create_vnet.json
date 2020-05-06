@@ -32,7 +32,7 @@
         "bastionSubnetName": "AzureBastionSubnet",
         "kafkaSubnetName": "KafkaSubnet",
         "kafkaNsgName": "[concat(variables('kafkaSubnetName'), '-nsg')]",
-        "sparkSubnetName": "SparkBastionSubnet",
+        "sparkSubnetName": "SparkSubnet",
         "sparkNsgName": "[concat(variables('sparkSubnetName'), '-nsg')]",
         "gatewaySubnetPrefix": "[concat(variables('addressSpaceRoot'), '.0.0/27')]",
         "firewallSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.1.0/24')]",
