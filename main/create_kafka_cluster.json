@@ -1,3 +1,250 @@
-{
-    "comment": "Create a Kafka Cluster in the VNet (kafka subnet)"
+{ 
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": 
+    {
+         "applicationId": {
+        "type": "string",
+        "defaultValue": "application",
+        "metadata": {
+          "description": "Application id - will be used as stem for resource names"
+        }
+    },
+      "clusterLoginUserName": {
+        "type": "string",
+        "metadata": {
+          "description": "Cluster Login Name"
+        }
+      },
+      "clusterLoginPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "The password must be at least 10 characters in length and must contain at least one digit, one non-alphanumeric character, and one upper or lower case letter."
+        }
+      },
+      "sshUserName": {
+        "type": "string",
+        "metadata": {
+          "description": "These credentials can be used to remotely access the cluster."
+        }
+      },
+      "sshPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "The password must be at least 10 characters in length and must contain at least one digit, one non-alphanumeric character, and one upper or lower case letter."
+        }
+      },
+      "_artifactsLocation": {
+        "type": "string",
+        "metadata": {
+          "description": "The base URI where artifacts required by this template are located."
+        },
+        "defaultValue": "https://raw.githubusercontent.com/arnabganguly/Kafkaschemaregistry/master/"
+      },
+      "_artifactsLocationSasToken": {
+        "type": "securestring",
+        "metadata": {
+            "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated. Use the defaultValue if the staging location is not secured."
+        },
+        "defaultValue": ""
+      },
+      "kafkaRestProxyGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Kafka REST Proxy security group."
+            }
+        },
+      "kafkaRestProxyGroupId": {
+            "type": "string",
+            "metadata": {
+                "description": "The id of the Kafka REST Proxy security group."
+            }
+        }
+    },
+    "variables": {
+        "clusterName" : "[concat(parameters('applicationId'), 'kafka')]",
+        "vNet": {
+            "name": "[concat(parameters('applicationId'),'-vnet')]",
+            "id": "[resourceId('Microsoft.Network/virtualNetworks', concat(variables('vNet').name))]",
+            "kafkaSubnetName": "KafkaSubnet",
+            "kafkaSubnetId": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('vNet').name, '/subnets/', variables('vNet').kafkaSubnetName))]"
+          },
+        "install" : 
+        {
+             "installScriptActionFolder": "scripts",
+             "installScriptAction": "schemaregistry.sh",
+             "installApplicationName": "schema-registry"
+        },
+
+      "clStgAcnt": "[concat(variables('clusterName'),'store')]",
+      "storageAccountType": "Standard_LRS"    
+    },
+    "resources": [
+    {
+        "type": "Microsoft.Storage/storageAccounts",
+        "name": "[variables('clStgAcnt')]",
+        "location": "[resourceGroup().location]",
+        "apiVersion": "2019-04-01",
+        "sku": {
+          "name": "[variables('storageAccountType')]"
+        },
+        "kind": "Storage",
+        "properties": {}
+    },
+      {
+        "name": "[variables('clusterName')]",
+        "type": "Microsoft.HDInsight/clusters",
+        "location": "[resourceGroup().location]",
+        "apiVersion": "2018-06-01-preview",
+        "dependsOn": [
+          "[concat('Microsoft.Storage/storageAccounts/',variables('clStgAcnt'))]"
+        ],
+        "properties": {
+          "clusterVersion": "4.0",
+          "osType": "Linux",
+          "clusterDefinition": {
+            "kind": "KAFKA",
+            "componentVersion": {
+                "Kafka": "2.1"
+              },
+            "configurations": {
+              "gateway": {
+                "restAuthCredential.isEnabled": true,
+                "restAuthCredential.username": "[parameters('clusterLoginUserName')]",
+                "restAuthCredential.password": "[parameters('clusterLoginPassword')]"
+              }
+            }
+          },
+          "storageProfile": {
+            "storageaccounts": [
+              {
+                "name": "[replace(replace(reference(resourceId('Microsoft.Storage/storageAccounts', variables('clStgAcnt')), '2016-01-01').primaryEndpoints.blob,'https://',''),'/','')]",
+                "isDefault": true,
+                "container": "[variables('clusterName')]",
+                "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('clStgAcnt')), '2017-10-01').keys[0].value]"
+              }
+            ]
+          },
+          "computeProfile": {
+            "roles": [
+              {
+                "name": "headnode",
+                "targetInstanceCount": 2,
+                "hardwareProfile": {
+                  "vmSize": "Standard_D3_v2"
+                },
+                "osProfile": {
+                  "linuxOperatingSystemProfile": {
+                    "username": "[parameters('sshUserName')]",
+                    "password": "[parameters('sshPassword')]"
+                  }
+                },
+                "virtualNetworkProfile": {
+                    "id": "[variables('vNet').id]",
+                    "subnet": "[variables('vNet').kafkaSubnetId]"
+                }
+              },
+              {
+                "name": "workernode",
+                "targetInstanceCount": 4,
+                "hardwareProfile": {
+                  "vmSize": "Standard_D3_v2"
+                },
+                "dataDisksGroups": [
+                  {
+                    "disksPerNode": 2
+                  }
+                ],
+                "osProfile": {
+                  "linuxOperatingSystemProfile": {
+                    "username": "[parameters('sshUserName')]",
+                    "password": "[parameters('sshPassword')]"
+                  }
+                }
+              },
+              {
+                "name": "kafkamanagementnode",
+                "targetInstanceCount": 2,
+                "hardwareProfile": {
+                              "vmSize": "Standard_D4_V2"
+                },
+                "osProfile": {
+                  "linuxOperatingSystemProfile": {
+                      "username": "[parameters('sshUserName')]",
+                      "password": "[parameters('sshPassword')]"
+                    }
+                }
+              },
+              {
+                "name": "zookeepernode",
+                "targetInstanceCount": 3,
+                "hardwareProfile": {
+                  "vmSize": "Standard_A4_v2"
+                },
+                "osProfile": {
+                  "linuxOperatingSystemProfile": {
+                    "username": "[parameters('sshUserName')]",
+                    "password": "[parameters('sshPassword')]"
+                  }
+                }
+              }
+            ]
+          },
+          "KafkaRestProperties": {
+              "ClientGroupInfo": {
+                  "GroupName": "[parameters('KafkaRestProxyGroupName')]",
+                  "GroupId": "[parameters('KafkaRestProxyGroupId')]"
+              }
+          }
+        }
+      },
+      {
+        "name": "[concat(variables('clusterName'),'/', variables('install').installApplicationName)]",
+        "type": "Microsoft.HDInsight/clusters/applications",
+        "apiVersion": "2018-06-01-preview",
+        "dependsOn": [
+          "[concat('Microsoft.HDInsight/clusters/',variables('clusterName'))]"
+        ],
+        "properties": {
+          "computeProfile": {
+            "roles": [
+              {
+                "name": "edgenode",
+                "targetInstanceCount": 1,
+                "hardwareProfile": {
+                  "vmSize": "Standard_D3_v2"
+                }
+              }
+            ]
+          },
+          "installScriptActions": [
+            {
+              "name": "[concat('schemaregistry','-' ,uniquestring(variables('install').installApplicationName))]",
+              "uri": "[concat(parameters('_artifactsLocation'), variables('install').installScriptActionFolder, '/', variables('install').installScriptAction, parameters('_artifactsLocationSasToken'))]",
+              "roles": [
+                "edgenode"
+              ]
+            }
+          ],
+          "sshEndpoints": [
+            {
+              "location": "[concat(variables('install').installApplicationName,'.',variables('clusterName'),'-ssh.azurehdinsight.net')]",
+              "destinationPort": 22,
+              "publicPort": 22
+            }
+          ],
+          "applicationType": "CustomApplication"
+        }
+      }
+    ],
+    "outputs": {
+        "vnet": {
+          "type": "object",
+          "value": "[reference(resourceId('Microsoft.Network/virtualNetworks',variables('vNet').name))]"
+        },
+        "cluster": {
+          "type": "object",
+          "value": "[reference(resourceId('Microsoft.HDInsight/clusters',variables('clusterName')))]"
+        }
+      }
 }
