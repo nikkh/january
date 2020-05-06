@@ -6,4 +6,6 @@ This page enables you to discretly deploy ARM templates for the infrastruture - 
 
 [Deploy Bastion](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikkh%2Fjanuary%2Fmaster%2Fmain%2Fcreate_bastion.json)
 
+[Deploy Kafka](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikkh%2Fjanuary%2Fmaster%2Fmain%2Fcreate_kafka_cluster.json)
+
 
