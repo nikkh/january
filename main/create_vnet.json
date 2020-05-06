@@ -1,0 +1,119 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vnetName": {
+        "type": "string",
+        "defaultValue": "VNet",
+        "metadata": {
+          "description": "VNet name"
+        }
+      },
+      "vnetAddressPrefix": {
+        "type": "string",
+        "defaultValue": "10.0.0.0/16",
+        "metadata": {
+          "description": "Address prefix (e.g. 10.0.0.0/16)"
+        }
+      },
+      "location": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location for all resources."
+        }
+      }
+    },
+    "variables": 
+    {
+        "addressSpaceRoot": "[substring(parameters('vnetAddressPrefix'), 0, 4)]",
+        "gatewaySubnetName": "GatewaySubnet",
+        "firewallSubnetName": "AzureFirewallSubnet",
+        "bastionSubnetName": "AzureBastionSubnet",
+        "kafkaSubnetName": "KafkaSubnet",
+        "sparkSubnetName": "SparkBastionSubnet",
+        "gatewaySubnetPrefix": "[concat(variables('addressSpaceRoot'), '.0.0/27')]",
+        "firewallSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.1.0/24')]",
+        "bastionSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.2.0/24')]",
+        "kafkaSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.3.0/24')]",
+        "sparkSubnetPrefix": "[concat(variables('addressSpaceRoot'), '.4.0/24')]"
+    },
+    "resources": [
+      {
+        "apiVersion": "2018-10-01",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[parameters('vnetName')]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('vnetAddressPrefix')]"
+            ]
+          }
+        },
+        "resources": [
+          {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "location": "[parameters('location')]",
+            "name": "[variables('gatewaySubnetName')]",
+            "dependsOn": [
+              "[parameters('vnetName')]"
+            ],
+            "properties": {
+              "addressPrefix": "[variables('gatewaySubnetPrefix')]"
+            }
+          },
+          {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "location": "[parameters('location')]",
+            "name": "[variables('firewallSubnetName')]",
+            "dependsOn": [
+              "[parameters('vnetName')]"
+            ],
+            "properties": {
+              "addressPrefix": "[variables('firewallSubnetPrefix')]"
+            }
+          },
+          {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "location": "[parameters('location')]",
+            "name": "[variables('bastionSubnetName')]",
+            "dependsOn": [
+              "[parameters('vnetName')]"
+            ],
+            "properties": {
+              "addressPrefix": "[variables('bastionSubnetPrefix')]"
+            }
+          },
+          {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "location": "[parameters('location')]",
+            "name": "[variables('kafkaSubnetName')]",
+            "dependsOn": [
+              "[parameters('vnetName')]"
+            ],
+            "properties": {
+              "addressPrefix": "[variables('kafkaSubnetPrefix')]"
+            }
+          },
+          {
+            "apiVersion": "2018-10-01",
+            "type": "subnets",
+            "location": "[parameters('location')]",
+            "name": "[variables('sparkSubnetName')]",
+            "dependsOn": [
+              "[parameters('vnetName')]"
+            ],
+            "properties": {
+              "addressPrefix": "[variables('sparkSubnetPrefix')]"
+            }
+          }
+         
+        ]
+      }
+    ]
+  }

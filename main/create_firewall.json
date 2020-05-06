@@ -1,0 +1,5 @@
+{
+    "comment": "Create an Azure Firewall in the VNet",
+    "link" : "https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/hdinsight/hdinsight-restrict-outbound-traffic.md",
+    "note1" : "firewall logging and monitoring"
+}
