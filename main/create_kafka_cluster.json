@@ -66,7 +66,7 @@
         "vNetName": "[concat(parameters('applicationId'),'-vnet')]",
         "vNetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName'))]",
         "vNetKafkaSubnetName": "KafkaSubnet",
-        "vNetKafkaSubnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName'), '/subnets/', variables('vNetKafkaSubnetName'))]",
+        "vNetKafkaSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vNetName'), variables('vNetKafkaSubnetName'))]",
         "install" : 
         {
              "installScriptActionFolder": "scripts",
@@ -235,10 +235,7 @@
       }
     ],
     "outputs": {
-        "vnet": {
-          "type": "object",
-          "value": "[reference(resourceId('Microsoft.Network/virtualNetworks',variables('vNetName')))]"
-        },
+        
         "cluster": {
           "type": "object",
           "value": "[reference(resourceId('Microsoft.HDInsight/clusters',variables('clusterName')))]"
