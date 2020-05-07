@@ -63,12 +63,12 @@
     },
     "variables": {
         "clusterName" : "[concat(parameters('applicationId'), 'kafka')]",
-        "vNet": {
-            "name": "[concat(parameters('applicationId'),'-vnet')]",
-            "id": "[resourceId('Microsoft.Network/virtualNetworks', concat(variables('vNet').name))]",
-            "kafkaSubnetName": "KafkaSubnet",
-            "kafkaSubnetId": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('vNet').name, '/subnets/', variables('vNet').kafkaSubnetName))]"
-          },
+       
+        "vNetName": "[concat(parameters('applicationId'),'-vnet')]",
+        "vNetId": "[resourceId('Microsoft.Network/virtualNetworks', concat(variables('vNetName')))]",
+        "vNetKafkaSubnetName": "KafkaSubnet",
+        "vNetKafkaSubnetId": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('vNetName'), '/subnets/', variables('vNetKafkaSubnetName')))]",
+       
         "install" : 
         {
              "installScriptActionFolder": "scripts",
@@ -140,8 +140,8 @@
                   }
                 },
                 "virtualNetworkProfile": {
-                    "id": "[variables('vNet').id]",
-                    "subnet": "[variables('vNet').kafkaSubnetId]"
+                    "id": "[variables('vNetId')]",
+                    "subnet": "[variables('vNetKafkaSubnetId')]"
                 }
               },
               {
@@ -240,7 +240,7 @@
     "outputs": {
         "vnet": {
           "type": "object",
-          "value": "[reference(resourceId('Microsoft.Network/virtualNetworks',variables('vNet').name))]"
+          "value": "[reference(resourceId('Microsoft.Network/virtualNetworks',variables('vNetName')))]"
         },
         "cluster": {
           "type": "object",
