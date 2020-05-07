@@ -63,21 +63,18 @@
     },
     "variables": {
         "clusterName" : "[concat(parameters('applicationId'), 'kafka')]",
-       
         "vNetName": "[concat(parameters('applicationId'),'-vnet')]",
-        "vNetId": "[resourceId('Microsoft.Network/virtualNetworks', concat(variables('vNetName')))]",
+        "vNetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName'))]",
         "vNetKafkaSubnetName": "KafkaSubnet",
-        "vNetKafkaSubnetId": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('vNetName'), '/subnets/', variables('vNetKafkaSubnetName')))]",
-       
+        "vNetKafkaSubnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetName'), '/subnets/', variables('vNetKafkaSubnetName'))]",
         "install" : 
         {
              "installScriptActionFolder": "scripts",
              "installScriptAction": "schemaregistry.sh",
              "installApplicationName": "schema-registry"
         },
-
-      "clStgAcnt": "[concat(variables('clusterName'),'store')]",
-      "storageAccountType": "Standard_LRS"    
+        "clStgAcnt": "[concat(variables('clusterName'),'store')]",
+        "storageAccountType": "Standard_LRS"    
     },
     "resources": [
     {
