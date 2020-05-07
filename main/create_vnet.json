@@ -61,7 +61,7 @@
             "location": "[parameters('location')]",
             "name": "[variables('gatewaySubnetName')]",
             "dependsOn": [
-              "[variables('vnetName')]"
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
             ],
             "properties": {
               "addressPrefix": "[variables('gatewaySubnetPrefix')]"
@@ -73,7 +73,8 @@
             "location": "[parameters('location')]",
             "name": "[variables('firewallSubnetName')]",
             "dependsOn": [
-              "[variables('vnetName')]"
+              "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+              "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vNetName'), variables('gatewaySubnetName'))]"
             ],
             "properties": {
               "addressPrefix": "[variables('firewallSubnetPrefix')]"
@@ -85,7 +86,8 @@
             "location": "[parameters('location')]",
             "name": "[variables('bastionSubnetName')]",
             "dependsOn": [
-              "[variables('vnetName')]"
+               "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+              "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vNetName'), variables('firewallSubnetName'))]"
             ],
             "properties": {
               "addressPrefix": "[variables('bastionSubnetPrefix')]"
@@ -97,7 +99,9 @@
             "location": "[parameters('location')]",
             "name": "[variables('kafkaSubnetName')]",
             "dependsOn": [
-              "[variables('vnetName')]", "[variables('kafkaNsgName')]"
+               "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+              "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vNetName'), variables('bastionSubnetName'))]",
+              "[resourceId('Microsoft.Network/networkSecurityGroups', variables('kafkaNsgName'))]"
             ],
             "properties": {
               "addressPrefix": "[variables('kafkaSubnetPrefix')]",
@@ -112,7 +116,9 @@
             "location": "[parameters('location')]",
             "name": "[variables('sparkSubnetName')]",
             "dependsOn": [
-              "[variables('vnetName')]"
+              "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+              "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vNetName'), variables('kafkaSubnetName'))]",
+              "[resourceId('Microsoft.Network/networkSecurityGroups', variables('sparkNsgName'))]"
             ],
             "properties": {
               "addressPrefix": "[variables('sparkSubnetPrefix')]",
@@ -130,7 +136,25 @@
             "name": "[variables('kafkaNsgName')]",
             "location": "[parameters('location')]",
             "properties": {
-                "securityRules": []
+               "securityRules": [
+                    {
+                        "name": "HDInsight",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "HDInsight",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
             }
        },
         {
