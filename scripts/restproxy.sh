@@ -20,10 +20,10 @@ Type=simple
 Restart=always
 RestartSec=1
 User=ohklvmadmin
-ExecStart=/usr/bin/rest-proxy-start /etc/rest-proxy/rest-proxy.properties
+ExecStart=/usr/bin/kafka-rest-start /etc/kafka-rest/kafka-rest.properties
 [Install]
 WantedBy=multi-user.target
-" > /etc/systemd/system/rest-proxy.service
+" > /etc/systemd/system/kafka-rest.service
  
 echo "
 bootstrap.servers=<myproject>.cloud:9092
@@ -31,9 +31,9 @@ bootstrap.servers=<myproject>.cloud:9092
 schema.registry.url=http://10.0.3.8:8081
 basic.auth.credentials.source=USER_INFO
 schema.registry.basic.auth.user.info=<schema-registry-api-key>:<schema-registry-api-secret>
-" > /etc/rest-proxy/rest-proxy.properties
+" > /etc/kafka-rest/kafka-rest.properties
 
-systemctl start rest-proxy
-systemctl enable rest-proxy
+systemctl start kafka-rest
+systemctl enable kafka-rest
 
 echo "Installation successful."
